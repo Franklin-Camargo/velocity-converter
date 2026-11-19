@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Velocity Converter</title>
+<style>
+:root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#17243b;background:#f3f6fb}*{box-sizing:border-box}body{margin:0;padding:28px 16px}.container{max-width:520px;margin:45px auto;background:white;padding:30px 24px;border-radius:18px;box-shadow:0 8px 32px #14233a14}h1{margin:0 0 8px;font-size:1.8rem}p{color:#5d6b7c;line-height:1.5}label{display:block;font-weight:600;margin-top:22px;margin-bottom:8px}input,select{width:100%;padding:14px;border:1px solid #bdc9d7;border-radius:10px;font-size:1.1rem;background:white;color:#17243b}button{width:100%;margin-top:22px;padding:15px;border:0;border-radius:10px;background:#1169ce;color:white;font-size:1.05rem;font-weight:700;cursor:pointer}.result{margin-top:24px;padding:18px;background:#edf5ff;border-radius:10px;font-size:1.2rem;font-weight:650;min-height:65px}.note{font-size:.87rem}</style>
+</head>
+<body>
+<main class="container">
+<h1>Velocity Converter</h1>
+<p>Convert velocity between meters per second (m/s) and kilometers per hour (km/h).</p>
+<label for="direction">Conversion</label>
+<select id="direction"><option value="ms-kmh">m/s → km/h</option><option value="kmh-ms">km/h → m/s</option></select>
+<label for="velocity">Velocity</label>
+<input id="velocity" type="text" inputmode="decimal" value="6.0" placeholder="Enter a value, e.g. 6.0">
+<button id="convert" type="button">Convert</button>
+<button id="swap" type="button" style="margin-top:10px;background:#e5edf7;color:#17243b">Swap units</button>
+<div id="result" class="result" aria-live="polite">6.0 m/s = 21.6000 km/h</div>
+<p class="note">Use a period (.) as the decimal separator.</p>
+</main>
+<script>
+(function(){
+const direction=document.getElementById('direction');
+const velocity=document.getElementById('velocity');
+const result=document.getElementById('result');
+function convert(){const raw=velocity.value.trim();if(!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(raw)){result.textContent='Enter a valid number using a decimal point (.).';return;}const n=Number(raw);if(!Number.isFinite(n)){result.textContent='Enter a finite number.';return;}const fromMs=direction.value==='ms-kmh';const output=fromMs?n*3.6:n/3.6;result.textContent=`${raw} ${fromMs?'m/s':'km/h'} = ${output.toFixed(4)} ${fromMs?'km/h':'m/s'}`;}
+document.getElementById('convert').addEventListener('click',convert);
+document.getElementById('swap').addEventListener('click',()=>{direction.value=direction.value==='ms-kmh'?'kmh-ms':'ms-kmh';convert();});
+velocity.addEventListener('keydown',e=>{if(e.key==='Enter')convert();});direction.addEventListener('change',convert);convert();
+})();
+</script>
+</body>
+</html>
